@@ -1,3 +1,12 @@
+:root {
+    --black: black;
+    --tomato: tomato;
+    --confirm: #009f5a;
+    --scale-gray: #d3d3d3;
+
+    --radius-button : 5px;
+}
+
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -14,20 +23,27 @@ body {
 .estiloGeralBotoes {
     border: none;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: var(--radius-button);
     padding: 10px 20px;
     cursor: pointer;
     display: block;
     font-size: 0.9rem;
+
+    transition: 1s;
+}
+
+.estiloGeralBotoes:hover {
+    transition: 1s;
+    transform: scale(1.1);
 }
 
 .estiloGeralBotoes--mostrarTodos {
-    color: black;
-    background-color: #d3d3d3;
+    color: var(--black);
+    background-color: var(--scale-gray);
 }
 
 .estiloGeralBotoes--filtrarHortifruti {
-    background-color: tomato;
+    background-color: var(--tomato);
     color: white;
 }
 
@@ -38,12 +54,12 @@ body {
 
 .campoBuscaPor {
     border-radius: 5px 0 0 5px;
-    border: 1px solid black;
+    border: 1px solid var(--black);
     padding: 0 10px;
 }
 
 .estiloGeralBotoes--botaoBuscaPor {
-    background-color: rgb(17, 17, 20);
+    background-color: var(--black);
     color: white;
     border-radius: 0 5px 5px 0;
 }
@@ -71,17 +87,17 @@ main {
 }
 
 .containerListaProdutos ul li:not(ol li) {
-    color: black;
+    color: var(--black);
     font-weight: bold;
     padding: 20px;
     margin: 10px;
-    border-radius: 5px;
+    border-radius: var(--radius-button);
     transition: ease-in-out 0.1s;
     width: 20%;
 }
 
 .containerListaProdutos ul li:not(ol li):hover {
-    box-shadow: 3px 3px 13px 1px rgb(146 146 146);
+    box-shadow: 3px 3px 13px 1px var(--scale-gray);
 }
 
 .containerListaProdutos ul li img {
@@ -110,23 +126,24 @@ main {
 }
 
 .containerListaProdutos ul li button {
-    background-color: #009f5a;
+    background-color: var(--confirm);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--radius-button);
     font-weight: bold;
     color: white;
     cursor: pointer;
     height: 40px;
 }
 
-.containerListaProdutos ul li button:hover {
-    box-shadow: 1px 1px 2px rgb(189, 189, 189);
+.containerListaProdutos ul li button :hover {
+    box-shadow: 1px 1px 2px var(--scale-gray);
 }
 
 .containerListaProdutos ul li ol {
     list-style: inside decimal;
     text-align: left;
 }
+
 .containerListaProdutos ul li ol li {
     font-size: 13px;
     margin: 7px 0;
@@ -137,17 +154,16 @@ main {
     text-align: center;
     margin: 40px 0 30px;
 }
+
 .containerPrecoTotal p {
     font-size: 1rem;
     font-weight: 600;
 }
-/* .containerPrecoTotal p span {
-} */
 
 .containerCarrinho {
     width: 450px;
     text-align: center;
-    border: 1px solid #ccc;
+    border: 1px solid var(--scale-gray);
 }
 .containerCarrinho img {
     max-width: 100px;
@@ -156,9 +172,11 @@ main {
     display: flex;
     flex-direction: column;
 }
+
 .containerCarrinho button {
     display: none;
 }
+
 .containerCarrinho li {
     display: flex;
     justify-content: space-around;
