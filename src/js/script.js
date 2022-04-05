@@ -1,40 +1,6 @@
 const btnEstiloGeral = 'estiloGeralBotoes';
 let total = 0;
 
-function adicionarButton() {
-    const adicionarCarrinho = document.querySelectorAll('.containerListaProdutos ul li button');
-    adicionarCarrinho.forEach((element) => element.addEventListener('click', (event) => {
-
-        const id = element.closest('li').id;
-        const imagem = element.closest('li').childNodes[0].src;
-        const nome = element.closest('li').childNodes[1].innerText;
-        const valor = element.closest('li').childNodes[2].innerText;
-        const secao = element.closest('li').childNodes[3].innerText;
-        const numeric = Number(valor.replace('R$', ''));
-        total += numeric;
-
-        carrinho(id, imagem, nome, numeric.toFixed(2), secao, total.toFixed(2));
-    }))
-}
-
-function adicionarComponentes() {
-    const componentesProdutos = document.querySelectorAll('.containerListaProdutos ul li ol');
-    componentesProdutos.forEach((element, index) => {
-        produtos.filter(({
-            id,
-            componentes
-        }) => {
-            if (id === Number(componentesProdutos[index].closest('li').id)) {
-                componentes.forEach((element) => {
-                    const liComponentesProduto = document.createElement('li');
-                    liComponentesProduto.innerText = element;
-
-                    componentesProdutos[index].closest('ol').appendChild(liComponentesProduto);
-                })
-            }
-        })
-    })
-}
 
 const headerContent = () => {
     const divHeader = document.createElement("div");
@@ -87,7 +53,6 @@ const listaContent = (id, imagem, nome, valor, secao) => {
     adicionarProduto.innerText = 'Adicionar ao Carrinho';
 
     document.querySelector('ul').appendChild(liProduto);
-    liProduto.append(imgProduto, nomeProduto, valorProduto, secaoProduto, adicionarProduto);
     liProduto.append(imgProduto, nomeProduto, valorProduto, secaoProduto, componentesProduto, adicionarProduto);
 }
 
@@ -114,6 +79,7 @@ const filtrarTodos = (data) => {
         categoria,
         img
     }) => {
+        
         listaContent(id, img, nome, preco, secao, categoria)
     })
 
@@ -175,4 +141,43 @@ const carrinho = (id, imagem, nome, preco, secao, total) => {
     listaCarrinho.append(listaCarrinhoImg, listaCarrinhoNome, listaCarrinhoPreco, listaCarrinhoSecao);
 
     document.querySelector('#precoTotal').innerText = total;
+}
+
+function adicionarButton() {
+    const adicionarCarrinho = document.querySelectorAll('.containerListaProdutos ul li button');
+    adicionarCarrinho.forEach((element, index) => element.addEventListener('click', (event) => {
+
+        produtos.filter(({
+            id,
+            img,
+            nome,
+            preco,
+            secao
+        }) => {
+            if (id === Number(adicionarCarrinho[index].closest('li').id)) {
+                total += parseInt(preco);
+                carrinho(id, img, nome, preco, secao, total);
+            }
+        });
+    }))
+}
+
+function adicionarComponentes() {
+    const componentesProdutos = document.querySelectorAll('.containerListaProdutos ul li ol');
+    componentesProdutos.forEach((element, index) => {
+        
+        produtos.filter(({
+            id,
+            componentes
+        }) => {
+            if (id === Number(componentesProdutos[index].closest('li').id)) {
+                componentes.forEach((element) => {
+                    const liComponentesProduto = document.createElement('li');
+                    liComponentesProduto.innerText = element;
+
+                    componentesProdutos[index].closest('ol').appendChild(liComponentesProduto);
+                })
+            }
+        })
+    })
 }
