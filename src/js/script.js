@@ -65,13 +65,15 @@ const filtrarPor = (event) => {
 
         return procurar
     } else {
-        tela();
+        document.querySelector('ul').innerText = '';
+
+        filtrarTodos(produtos);
     }
 }
 document.querySelector('.estiloGeralBotoes--botaoBuscaPor').addEventListener('click', filtrarPor);
 
 const filtrarTodos = (data) => {
-    data.filter(({
+    data.forEach(({
         id,
         nome,
         preco,
@@ -79,7 +81,7 @@ const filtrarTodos = (data) => {
         categoria,
         img
     }) => {
-        
+
         listaContent(id, img, nome, preco, secao, categoria)
     })
 
@@ -102,7 +104,7 @@ const filtrarProdutos = (data, filter) => {
             filter.toLowerCase() === categoria.toLowerCase() ||
             filter.toLowerCase() === secao.toLowerCase()) {
 
-            listaContent(id, img, nome, preco, secao);
+            return listaContent(id, img, nome, preco, secao);
         }
     });
 
@@ -156,7 +158,7 @@ function adicionarButton() {
         }) => {
             if (id === Number(adicionarCarrinho[index].closest('li').id)) {
                 total += parseInt(preco);
-                carrinho(id, img, nome, preco, secao, total);
+                carrinho(id, img, nome, preco, secao, total.toFixed(2));
             }
         });
     }))
@@ -165,7 +167,7 @@ function adicionarButton() {
 function adicionarComponentes() {
     const componentesProdutos = document.querySelectorAll('.containerListaProdutos ul li ol');
     componentesProdutos.forEach((element, index) => {
-        
+
         produtos.filter(({
             id,
             componentes
