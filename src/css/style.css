@@ -1,10 +1,10 @@
 :root {
     --black: black;
     --tomato: tomato;
-    --confirm: #009f5a;
     --scale-gray: #d3d3d3;
+    --confirm: #009f5a;
 
-    --radius-button : 5px;
+    --radius-button: 5px;
 }
 
 body {

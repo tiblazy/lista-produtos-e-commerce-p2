@@ -1,6 +1,6 @@
+const adicionarTexto = 'Adicionar ao Carrinho';
 const btnEstiloGeral = 'estiloGeralBotoes';
 let total = 0;
-
 
 const headerContent = () => {
     const divHeader = document.createElement("div");
@@ -35,7 +35,7 @@ const headerContent = () => {
 }
 headerContent();
 
-const listaContent = (id, imagem, nome, valor, secao) => {
+const listaContent = (id, imagem, nome, valor, secao, addContent) => {
     const liProduto = document.createElement('li');
     const imgProduto = document.createElement('img');
     const nomeProduto = document.createElement('h3');
@@ -50,80 +50,44 @@ const listaContent = (id, imagem, nome, valor, secao) => {
     nomeProduto.innerText = nome;
     valorProduto.innerText = `R$ ${valor}`;
     secaoProduto.innerText = secao;
-    adicionarProduto.innerText = 'Adicionar ao Carrinho';
+    adicionarProduto.innerText = adicionarTexto;
 
     document.querySelector('ul').appendChild(liProduto);
     liProduto.append(imgProduto, nomeProduto, valorProduto, secaoProduto, componentesProduto, adicionarProduto);
 }
 
-const filtrarPor = (event) => {
+const filtrarTodos = (id, img, nome, preco, secao, botao) => {
+    return listaContent(id, img, nome, preco, secao, botao);
+}
+addContent(filter(produtos, filtrarTodos), adicionarButton, adicionarComponentes);
+
+const buttonFiltrarTodos = (event) => {
+    document.querySelector('ul').innerHTML = '';
+
+    return addContent(filter(produtos, filtrarTodos), adicionarButton, adicionarComponentes);
+}
+document.querySelector(`.${btnEstiloGeral}--mostrarTodos`).addEventListener('click', buttonFiltrarTodos);
+
+const buttonFiltrarSecao = (event) => {
+    const secao = document.querySelector(`.${btnEstiloGeral}--filtrarHortifruti`).innerText;
+    document.querySelector('ul').innerHTML = '';
+
+    return addContent(filter(produtos, filtrarTodos, secao), adicionarButton, adicionarComponentes);
+}
+document.querySelector(`.${btnEstiloGeral}--filtrarHortifruti`).addEventListener('click', buttonFiltrarSecao);
+
+
+const buttonBuscarPor = (event) => {
     const procurar = document.querySelector('input').value;
+    document.querySelector('ul').innerText = '';
 
-    if (procurar !== '') {
-        document.querySelector('ul').innerText = '';
-        filtrarProdutos(produtos, procurar)
-
-        return procurar
-    } else {
-        document.querySelector('ul').innerText = '';
-
-        filtrarTodos(produtos);
+    if (procurar === '') {
+        return addContent(filter(produtos, filtrarTodos), adicionarButton, adicionarComponentes);
     }
+
+    return addContent(filter(produtos, filtrarTodos, procurar), adicionarButton, adicionarComponentes);
 }
-document.querySelector('.estiloGeralBotoes--botaoBuscaPor').addEventListener('click', filtrarPor);
-
-const filtrarTodos = (data) => {
-    data.forEach(({
-        id,
-        nome,
-        preco,
-        secao,
-        categoria,
-        img
-    }) => {
-
-        listaContent(id, img, nome, preco, secao, categoria)
-    })
-
-    adicionarButton()
-    adicionarComponentes()
-}
-
-const filtrarProdutos = (data, filter) => {
-    data.filter(({
-        id,
-        nome,
-        preco,
-        secao,
-        categoria,
-        img
-    }) => {
-        document.querySelector('input').value = ''
-
-        if (filter.toLowerCase() === nome.toLowerCase() ||
-            filter.toLowerCase() === categoria.toLowerCase() ||
-            filter.toLowerCase() === secao.toLowerCase()) {
-
-            return listaContent(id, img, nome, preco, secao);
-        }
-    });
-
-    adicionarButton()
-    adicionarComponentes()
-}
-
-const filtraPorSecao = () => {
-    document.querySelector('ul').innerText = ''
-    filtrarProdutos(produtos, 'hortifruti');
-}
-document.querySelector('.estiloGeralBotoes--filtrarHortifruti').addEventListener('click', filtraPorSecao);
-
-const tela = () => {
-    document.querySelector('ul').innerText = ''
-    filtrarTodos(produtos);
-}
-tela();
-document.querySelector('.estiloGeralBotoes--mostrarTodos').addEventListener('click', tela);
+document.querySelector(`.${btnEstiloGeral}--botaoBuscaPor`).addEventListener('click', buttonBuscarPor);
 
 const carrinho = (id, imagem, nome, preco, secao, total) => {
 
@@ -145,11 +109,35 @@ const carrinho = (id, imagem, nome, preco, secao, total) => {
     document.querySelector('#precoTotal').innerText = total;
 }
 
-function adicionarButton() {
+//
+
+function filter(data, callback, procurarPor) {
+    data.filter(({
+        id,
+        nome,
+        preco,
+        secao,
+        categoria,
+        img
+    }) => {
+        if (procurarPor === undefined) {
+
+            return callback(id, img, nome, preco, secao);
+
+        } else if (procurarPor.toLowerCase() === nome.toLowerCase() ||
+
+            procurarPor.toLowerCase() === categoria.toLowerCase() ||
+            procurarPor.toLowerCase() === secao.toLowerCase()) {
+
+            return listaContent(id, img, nome, preco, secao);
+        }
+    })
+}
+
+function adicionarButton(data) {
     const adicionarCarrinho = document.querySelectorAll('.containerListaProdutos ul li button');
     adicionarCarrinho.forEach((element, index) => element.addEventListener('click', (event) => {
-
-        produtos.filter(({
+        data.filter(({
             id,
             img,
             nome,
@@ -164,11 +152,10 @@ function adicionarButton() {
     }))
 }
 
-function adicionarComponentes() {
+function adicionarComponentes(data) {
     const componentesProdutos = document.querySelectorAll('.containerListaProdutos ul li ol');
     componentesProdutos.forEach((element, index) => {
-
-        produtos.filter(({
+        data.filter(({
             id,
             componentes
         }) => {
@@ -182,4 +169,8 @@ function adicionarComponentes() {
             }
         })
     })
+}
+
+function addContent(functionFilter, adicionarButton, adicionarComponentes) {
+    return `${adicionarButton(produtos)} ${adicionarComponentes(produtos)}`;
 }
